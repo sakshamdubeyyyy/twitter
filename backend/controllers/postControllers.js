@@ -1,4 +1,4 @@
-const { Post } = require('../models');
+const { Post, Comment, User } = require("../models");
 
 // Create a new post
 exports.createPost = async (req, res) => {
@@ -23,8 +23,10 @@ exports.getAllPosts = async (req, res) => {
 // Get post by ID
 exports.getPostById = async (req, res) => {
   try {
-    const post = await Post.findOne({ where: { post_id: req.params.id, disabled: 0 } });
-    if (!post) return res.status(404).json({ error: 'Post not found' });
+    const post = await Post.findOne({
+      where: { post_id: req.params.id, disabled: 0 },
+    });
+    if (!post) return res.status(404).json({ error: "Post not found" });
     res.json(post);
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -35,10 +37,10 @@ exports.getPostById = async (req, res) => {
 exports.updatePost = async (req, res) => {
   try {
     const [updated] = await Post.update(req.body, {
-      where: { post_id: req.params.id, disabled: 0 }
+      where: { post_id: req.params.id, disabled: 0 },
     });
-    if (!updated) return res.status(404).json({ error: 'Post not found' });
-    res.json({ message: 'Post updated' });
+    if (!updated) return res.status(404).json({ error: "Post not found" });
+    res.json({ message: "Post updated" });
   } catch (err) {
     res.status(400).json({ error: err.message });
   }
@@ -47,12 +49,40 @@ exports.updatePost = async (req, res) => {
 // Soft delete post
 exports.deletePost = async (req, res) => {
   try {
-    const [deleted] = await Post.update({ disabled: 1 }, {
-      where: { post_id: req.params.id }
-    });
-    if (!deleted) return res.status(404).json({ error: 'Post not found' });
-    res.json({ message: 'Post disabled' });
+    const [deleted] = await Post.update(
+      { disabled: 1 },
+      {
+        where: { post_id: req.params.id },
+      }
+    );
+    if (!deleted) return res.status(404).json({ error: "Post not found" });
+    res.json({ message: "Post disabled" });
   } catch (err) {
     res.status(500).json({ error: err.message });
+  }
+};
+
+//Get post comments
+exports.getPostComments = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    // Check if the post exists
+    const post = await Post.findByPk(id);
+    if (!post) {
+      return res.status(404).json({ error: "Post not found" });
+    }
+
+    // Get all comments for the post, including the user who made each comment
+    const comments = await Comment.findAll({
+      where: { post_id: id },
+      include: [{ model: User, attributes: ["user_id", "name"] }],
+      order: [["created_at", "ASC"]],
+    });
+
+    res.json(comments);
+  } catch (error) {
+    console.error("Error fetching comments:", error);
+    res.status(500).json({ error: "Internal server error" });
   }
 };
