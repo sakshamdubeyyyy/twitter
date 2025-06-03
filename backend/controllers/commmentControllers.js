@@ -56,3 +56,19 @@ exports.deleteComment = async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 };
+
+// Get all active comments for a specific post
+exports.getCommentsByPostId = async (req, res) => {
+  try {
+    const { postId } = req.params;
+    const comments = await Comment.findAll({
+      where: {
+        post_id: postId,
+        disabled: 0
+      }
+    });
+    res.json(comments);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};

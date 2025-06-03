@@ -1,10 +1,13 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Login from "./pages/Login";
-import Register from "./pages/Register";
 import { useSelector } from "react-redux";
 import { useEffect } from "react";
 import "./App.css";
 import ThemeToggle from "./components/ThemeToggle";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
+import PrivateRoute from "./components/PrivateRoute";
+import Home from "./pages/Home";
+import MakePost from "./components/MakePost";
 
 function App() {
   const { theme } = useSelector((state) => state.theme);
@@ -23,12 +26,24 @@ function App() {
       <Routes>
         <Route path="/" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route
+          path="/home"
+          element={
+            <PrivateRoute>
+              <Home />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/makePost"
+          element={
+            <PrivateRoute>
+              <MakePost />
+            </PrivateRoute>
+          }
+        />
       </Routes>
     </Router>
-    // <>
-    //   <ThemeToggle />
-    //   <div className="font-bold text-red-400 dark:text-green-500">Hello</div>
-    // </>
   );
 }
 

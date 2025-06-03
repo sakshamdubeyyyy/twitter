@@ -3,15 +3,20 @@ import { useMutation } from "@tanstack/react-query";
 import { registerUser } from "../api/authApi";
 import { useDispatch } from "react-redux";
 import { setCredentials } from "../app/features/auth/authSlice";
+import { useNavigate } from "react-router-dom";
+import AuthPage from "../components/shared/AuthPage";
+import AuthForm from "../components/shared/AuthForm";
 
 export default function Register() {
   const [form, setForm] = useState({ name: "", email: "", password: "" });
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const { mutate, isLoading, error } = useMutation(registerUser, {
     onSuccess: (data) => {
       dispatch(setCredentials(data));
       alert("Registered successfully");
+      navigate("/");
     },
   });
 
@@ -20,27 +25,43 @@ export default function Register() {
     mutate(form);
   };
 
+  const fields = [
+    {
+      name: "name",
+      type: "text",
+      placeholder: "Name",
+      onChange: (e) => setForm({ ...form, name: e.target.value }),
+    },
+    {
+      name: "email",
+      type: "email",
+      placeholder: "Email",
+      onChange: (e) => setForm({ ...form, email: e.target.value }),
+    },
+    {
+      name: "password",
+      type: "password",
+      placeholder: "Password",
+      onChange: (e) => setForm({ ...form, password: e.target.value }),
+    },
+  ];
+
   return (
-    <form onSubmit={handleSubmit}>
-      <h2>Register</h2>
-      <input
-        placeholder="Name"
-        onChange={(e) => setForm({ ...form, name: e.target.value })}
+    <AuthPage>
+      <AuthForm
+        title="Create Account"
+        onSubmit={handleSubmit}
+        isLoading={isLoading}
+        error={error}
+        fields={fields}
+        submitText={{
+          default: "Register",
+          loading: "Creating account...",
+        }}
+        footerText="Already have an account?"
+        footerLinkText="Login"
+        footerLinkTo="/"
       />
-      <input
-        placeholder="Email"
-        type="email"
-        onChange={(e) => setForm({ ...form, email: e.target.value })}
-      />
-      <input
-        placeholder="Password"
-        type="password"
-        onChange={(e) => setForm({ ...form, password: e.target.value })}
-      />
-      <button type="submit" disabled={isLoading}>
-        Register
-      </button>
-      {error && <p>{error.response?.data?.message || "Error"}</p>}
-    </form>
+    </AuthPage>
   );
 }
