@@ -6,10 +6,11 @@ import MakeComment from "./MakeComment";
 import ConfirmationModal from "./ConfirmationModal";
 import { Pencil, Trash2 } from "lucide-react";
 
-const Comments = ({ postId, visible }) => {
+const Comments = ({ postId, visible, postOwnerId }) => {
+  const currentUserId = JSON.parse(localStorage.getItem("user_id"));
   const queryClient = useQueryClient();
   const [editCommentData, setEditCommentData] = useState(null);
-  const [commentToDelete, setCommentToDelete] = useState(null); 
+  const [commentToDelete, setCommentToDelete] = useState(null);
 
   const {
     data: comments,
@@ -64,33 +65,44 @@ const Comments = ({ postId, visible }) => {
 
             <div className="space-y-3">
               {comments.length === 0 ? (
-                <p className="text-gray-600 italic">No comments on this post.</p>
+                <p className="text-gray-600 italic">
+                  No comments on this post.
+                </p>
               ) : (
-                comments.map((comment) => (
-                  <div
-                    key={comment.comment_id}
-                    className="bg-teal-50 p-3 rounded-lg shadow-sm flex justify-between items-start"
-                  >
-                    <div>
-                      <p className="text-teal-700 font-semibold">
-                        {comment.name}
-                      </p>
-                      <p className="text-gray-800 text-sm">{comment.comment}</p>
+                comments.map((comment) => {
+                  const isOwnerOrAuthor =
+                    comment.user_id === currentUserId ||
+                    postOwnerId === currentUserId;
+                  return (
+                    <div
+                      key={comment.comment_id}
+                      className="bg-teal-50 p-3 rounded-lg shadow-sm flex justify-between items-start"
+                    >
+                      <div>
+                        <p className="text-teal-700 font-semibold">
+                          {comment.name}
+                        </p>
+                        <p className="text-gray-800 text-sm">
+                          {comment.comment}
+                        </p>
+                      </div>
+                      {isOwnerOrAuthor && (
+                        <div className="flex space-x-2 mt-1">
+                          <Pencil
+                            className="w-4 h-4 text-teal-600 cursor-pointer"
+                            onClick={() => setEditCommentData(comment)}
+                            title="Edit Comment"
+                          />
+                          <Trash2
+                            className="w-4 h-4 text-red-500 cursor-pointer"
+                            onClick={() => setCommentToDelete(comment)}
+                            title="Delete Comment"
+                          />
+                        </div>
+                      )}
                     </div>
-                    <div className="flex space-x-2 mt-1">
-                      <Pencil
-                        className="w-4 h-4 text-teal-600 cursor-pointer"
-                        onClick={() => setEditCommentData(comment)}
-                        title="Edit Comment"
-                      />
-                      <Trash2
-                        className="w-4 h-4 text-red-500 cursor-pointer"
-                        onClick={() => setCommentToDelete(comment)}
-                        title="Delete Comment"
-                      />
-                    </div>
-                  </div>
-                ))
+                  );
+                })
               )}
             </div>
           </motion.div>

@@ -97,7 +97,7 @@ const PostCard = ({ post, showOnlyReuse = false, refetchPosts }) => {
             <span>{showComments ? "Hide Comments" : "Comments"}</span>
           </button>
         </div>
-        <Comments postId={post.post_id} visible={showComments} />
+        <Comments postId={post.post_id} visible={showComments} postOwnerId={post.user_id} />
       </div>
 
       <ConfirmationModal

@@ -8,7 +8,7 @@ const MakeComment = ({ postId, onSuccess, editData, cancelEdit }) => {
 
   useEffect(() => {
     if (editData) {
-      setComment(editData.comment); // Pre-fill with existing comment
+      setComment(editData.comment); 
     }
   }, [editData]);
 
