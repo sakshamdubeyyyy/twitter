@@ -27,6 +27,12 @@ const UserProfile = ({ userId }) => {
     enabled: !!userId,
   });
 
+  const {refetch: refetchPosts} = useQuery({
+    queryKey: ["userPosts", userId],
+    queryFn: () => getUserPost(userId),
+    enabled: !!userId,
+  })
+
   if (isUserLoading)
     return <p className="text-teal-600 font-medium">Loading profile...</p>;
   if (isUserError)
@@ -34,7 +40,6 @@ const UserProfile = ({ userId }) => {
 
   const user = userData?.data;
   const userInitial = user.name?.charAt(0)?.toUpperCase() || "?";
-  const posts = postsData?.data || [];
 
   return (
     <div className="max-w-2xl mx-auto mt-10 space-y-8">
@@ -55,11 +60,11 @@ const UserProfile = ({ userId }) => {
         <h2 className="text-2xl font-bold text-teal-700 mb-4">Posts by {user.name}</h2>
         {isPostsLoading && <p className="text-teal-600">Loading posts...</p>}
         {isPostsError && <p className="text-red-500">Error: {postsError.message}</p>}
-        {!isPostsLoading && posts.length === 0 && (
+        {!isPostsLoading && postsData?.length === 0 && (
           <p className="text-gray-500">No posts yet.</p>
         )}
-        {posts.map((post) => (
-          <PostCard key={post.post_id} post={post} />
+        {postsData?.data?.map((post) => (
+          <PostCard key={post.post_id} post={post} refetchPosts={refetchPosts} />
         ))}
       </div>
     </div>

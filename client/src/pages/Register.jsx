@@ -6,6 +6,7 @@ import { setCredentials } from "../app/features/auth/authSlice";
 import { useNavigate } from "react-router-dom";
 import AuthPage from "../components/shared/AuthPage";
 import AuthForm from "../components/shared/AuthForm";
+import { toast } from "react-toastify";
 
 export default function Register() {
   const [form, setForm] = useState({ name: "", email: "", password: "" });
@@ -15,7 +16,7 @@ export default function Register() {
   const { mutate, isLoading, error } = useMutation(registerUser, {
     onSuccess: (data) => {
       dispatch(setCredentials(data));
-      alert("Registered successfully");
+      toast.success("Registered successfully");
       navigate("/");
     },
   });

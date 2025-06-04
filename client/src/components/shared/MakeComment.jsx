@@ -1,26 +1,54 @@
 import { useMutation } from "@tanstack/react-query";
-import React, { useState } from "react";
-import { makeNewComment } from "../../api/commentApi";
+import React, { useEffect, useState } from "react";
+import { makeNewComment, updateComment } from "../../api/commentApi";
+import { toast } from "react-toastify";
 
-const MakeComment = ({ postId, onSuccess }) => {
+const MakeComment = ({ postId, onSuccess, editData, cancelEdit }) => {
   const [comment, setComment] = useState("");
 
-  const { mutate, isLoading } = useMutation(makeNewComment, {
-    onSuccess: (data) => {
-      setComment("");
-      alert("Comment added!");
-      onSuccess && onSuccess();
-    },
-  });
+  useEffect(() => {
+    if (editData) {
+      setComment(editData.comment); // Pre-fill with existing comment
+    }
+  }, [editData]);
 
-  const handleComment = () => {
-    if (!comment.trim()) return alert("Comment cannot be empty.");
-    mutate({
+  const { mutate: createComment, isLoading: isCreating } = useMutation(
+    makeNewComment,
+    {
+      onSuccess: () => {
+        setComment("");
+        toast.success("Comment added successfully!");
+        onSuccess && onSuccess();
+      },
+    }
+  );
+
+  const { mutate: updateExistingComment, isLoading: isUpdating } = useMutation(
+    updateComment,
+    {
+      onSuccess: () => {
+        setComment("");
+        toast.success("Comment updated successfully!");
+        onSuccess && onSuccess();
+      },
+    }
+  );
+
+  const handleSubmit = () => {
+    if (!comment.trim()) return toast.error("Comment cannot be empty.");
+
+    const payload = {
       user_id: JSON.parse(localStorage.getItem("user_id")),
       post_id: postId,
       name: JSON.parse(localStorage.getItem("name")),
       comment,
-    });
+    };
+
+    if (editData) {
+      updateExistingComment({ ...payload, comment_id: editData.comment_id });
+    } else {
+      createComment(payload);
+    }
   };
 
   return (
@@ -32,12 +60,27 @@ const MakeComment = ({ postId, onSuccess }) => {
         className="flex-grow border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-teal-400"
         placeholder="Write a comment..."
       />
+      {editData && (
+        <button
+          onClick={() => {
+            setComment("");
+            cancelEdit();
+          }}
+          className="text-gray-500 text-sm"
+        >
+          Cancel
+        </button>
+      )}
       <button
-        onClick={handleComment}
-        disabled={isLoading}
+        onClick={handleSubmit}
+        disabled={isCreating || isUpdating}
         className="bg-teal-600 text-white px-4 py-2 rounded-lg hover:bg-teal-700 transition disabled:opacity-50"
       >
-        {isLoading ? "Posting..." : "Comment"}
+        {isCreating || isUpdating
+          ? "Saving..."
+          : editData
+          ? "Update"
+          : "Comment"}
       </button>
     </div>
   );

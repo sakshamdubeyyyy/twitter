@@ -11,3 +11,13 @@ export const makeNewComment = async (data) => {
     const res = await axios.post(`${API_URL}`, data);
     return res.data;
 }
+
+export const updateComment = async ({ comment_id, ...data }) => {
+    const res = await axios.put(`${API_URL}/${comment_id}`, data).then((res) => res.data);
+    return res;
+}
+
+export const deleteComment = async (commentId) => {
+    const res = await axios.delete(`${API_URL}/${commentId}`);
+    return res;
+}

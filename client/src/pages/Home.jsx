@@ -10,6 +10,7 @@ import UserProfile from "../components/UserProfile";
 import MakePost from "../components/MakePost";
 import Settings from "../components/Settings";
 import People from "../components/People";
+import { toast } from "react-toastify";
 
 const Home = () => {
   const dispatch = useDispatch();
@@ -23,7 +24,7 @@ const Home = () => {
       localStorage.removeItem("token");
       localStorage.removeItem("name");
       localStorage.removeItem("user_id");
-      alert("Logged out successfully");
+      toast.success("Logged out successfully!");
       navigate("/");
     },
   });
@@ -40,7 +41,7 @@ const Home = () => {
         return (
           <UserProfile userId={parseInt(localStorage.getItem("user_id"))} />
         );
-      case "Make Post":
+      case "Make new Post":
         return <MakePost />;
       case "Settings":
         return <Settings />;

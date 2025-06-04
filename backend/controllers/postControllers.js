@@ -1,4 +1,4 @@
-const { Post, Comment, User } = require("../models");
+const { Post, Comment, User, PostLike } = require("../models");
 
 // Create a new post
 exports.createPost = async (req, res) => {
@@ -10,21 +10,38 @@ exports.createPost = async (req, res) => {
   }
 };
 
-// Get all active posts
+// Get all active posts with likes included
 exports.getAllPosts = async (req, res) => {
   try {
-    const posts = await Post.findAll({ where: { disabled: 0 } });
+    const posts = await Post.findAll({
+      where: { disabled: 0 },
+      include: [
+        {
+          model: PostLike,
+          as: 'likes',
+          attributes: ['user_id'], 
+        },
+      ],
+      order: [['created_at', 'DESC']],
+    });
     res.json(posts);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 };
 
-// Get post by ID
+// Get post by ID with likes included
 exports.getPostById = async (req, res) => {
   try {
     const post = await Post.findOne({
       where: { post_id: req.params.id, disabled: 0 },
+      include: [
+        {
+          model: PostLike,
+          as: 'likes',
+          attributes: ['user_id'],
+        },
+      ],
     });
     if (!post) return res.status(404).json({ error: "Post not found" });
     res.json(post);
@@ -62,18 +79,16 @@ exports.deletePost = async (req, res) => {
   }
 };
 
-//Get post comments
+// Get post comments
 exports.getPostComments = async (req, res) => {
   const { id } = req.params;
 
   try {
-    // Check if the post exists
     const post = await Post.findByPk(id);
     if (!post) {
       return res.status(404).json({ error: "Post not found" });
     }
 
-    // Get all comments for the post, including the user who made each comment
     const comments = await Comment.findAll({
       where: { post_id: id },
       include: [{ model: User, attributes: ["user_id", "name"] }],
@@ -87,7 +102,7 @@ exports.getPostComments = async (req, res) => {
   }
 };
 
-// Get all active posts by a specific user
+// Get all active posts by a specific user with likes included
 exports.getPostsByUserId = async (req, res) => {
   const { id } = req.params;
 
@@ -97,6 +112,13 @@ exports.getPostsByUserId = async (req, res) => {
         user_id: id,
         disabled: 0,
       },
+      include: [
+        {
+          model: PostLike,
+          as: 'likes',
+          attributes: ['user_id'],
+        },
+      ],
       order: [["created_at", "DESC"]],
     });
 
@@ -120,6 +142,13 @@ exports.getDeletedPostsByUserId = async (req, res) => {
         user_id: id,
         disabled: 1,
       },
+      include: [
+        {
+          model: PostLike,
+          as: 'likes',
+          attributes: ['user_id'],
+        },
+      ],
       order: [["created_at", "DESC"]],
     });
 
@@ -133,13 +162,13 @@ exports.getDeletedPostsByUserId = async (req, res) => {
   }
 };
 
-// Restore a deleted post (bring back a soft-deleted post)
+// Restore a deleted post
 exports.restorePost = async (req, res) => {
   try {
     const [restored] = await Post.update(
       { disabled: 0 },
       {
-        where: { post_id: req.params.id, disabled: 1 }, // Only restore if currently disabled
+        where: { post_id: req.params.id, disabled: 1 },
       }
     );
 

@@ -1,6 +1,7 @@
 import { useMutation } from "@tanstack/react-query";
 import React, { useEffect, useState } from "react";
 import { createPost, updatePost } from "../api/postApi";
+import { toast } from "react-toastify";
 
 const MakePost = ({
   compact = false,
@@ -19,7 +20,7 @@ const MakePost = ({
 
   const createMutation = useMutation(createPost, {
     onSuccess: () => {
-      alert("Posted");
+      toast.success("Posted successfully!");
       setContent("");
       onClose?.();
     },
@@ -27,7 +28,7 @@ const MakePost = ({
 
   const updateMutation = useMutation((data) => updatePost(post.post_id, data), {
     onSuccess: () => {
-      alert("Post updated");
+      toast.success("Post updated successfully!");
       setContent("");
       onClose?.();
     },
@@ -57,7 +58,7 @@ const MakePost = ({
     >
       {compact && (
         <h1 className="text-teal-800 text-xl font-bold">
-          {isEdit ? "Edit Post" : "Make Post"}
+          {isEdit ? "Edit Post" : "Make new Post"}
         </h1>
       )}
       <textarea

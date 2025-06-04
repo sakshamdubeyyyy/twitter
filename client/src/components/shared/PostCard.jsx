@@ -2,23 +2,26 @@ import React, { useState } from "react";
 import Comments from "./Comments";
 import ConfirmationModal from "./ConfirmationModal";
 import { MessageSquare, Pencil, RotateCcw, Trash2 } from "lucide-react";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { deletePost, restorePost } from "../../api/postApi";
 import MakePost from "../MakePost";
+import { toast } from "react-toastify";
+import Likes from "./Likes";
 
-const PostCard = ({ post, showOnlyReuse = false }) => {
+const PostCard = ({ post, showOnlyReuse = false, refetchPosts }) => {
   const [showComments, setShowComments] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [editMode, setEditMode] = useState(false);
   const [editPostData, setEditPostData] = useState(null);
+  const queryClient = useQueryClient();
 
   const { mutate } = useMutation(deletePost, {
-    onSuccess: () => alert("Post deleted"),
+    onSuccess: () => toast.success("Post deleted"),
   });
 
   const { mutate: restore } = useMutation(restorePost, {
-    onSuccess: () => alert("restored")
-  })
+    onSuccess: () => toast.success("restored"),
+  });
 
   const userId = localStorage.getItem("user_id");
   const isOwner = userId === String(post.user_id);
@@ -38,8 +41,8 @@ const PostCard = ({ post, showOnlyReuse = false }) => {
   };
 
   const restoreUserPost = () => {
-    restore(post.post_id)
-  }
+    restore(post.post_id);
+  };
 
   return (
     <>
@@ -62,7 +65,7 @@ const PostCard = ({ post, showOnlyReuse = false }) => {
               className="text-purple-500 hover:text-purple-700 cursor-pointer"
               title="Reuse this post"
               onClick={() => {
-                restoreUserPost()
+                restoreUserPost();
               }}
             />
           ) : (
@@ -84,15 +87,16 @@ const PostCard = ({ post, showOnlyReuse = false }) => {
         </div>
 
         <p className="text-gray-700 mt-2 leading-relaxed">{post.content}</p>
-
-        <button
-          onClick={() => setShowComments((prev) => !prev)}
-          className="mt-4 flex items-center gap-2 text-teal-600 hover:text-teal-800 transition-colors"
-        >
-          <MessageSquare size={20} />
-          <span>{showComments ? "Hide Comments" : "View Comments"}</span>
-        </button>
-
+        <div className="flex gap-4">
+          <Likes post={post} userId={userId} refetchPosts={refetchPosts} />
+          <button
+            onClick={() => setShowComments((prev) => !prev)}
+            className="mt-4 flex items-center gap-2 text-teal-600 hover:text-teal-800 transition-colors"
+          >
+            <MessageSquare size={20} />
+            <span>{showComments ? "Hide Comments" : "Comments"}</span>
+          </button>
+        </div>
         <Comments postId={post.post_id} visible={showComments} />
       </div>
 

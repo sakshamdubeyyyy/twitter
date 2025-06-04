@@ -2,7 +2,7 @@ import React from 'react';
 import logo from "../assets/logo.jpg"
 
 const SideBar = ({ selectedButton, setSelectedButton, onLogout }) => {
-    const buttons = ["Feeds", "Your Profile", "Make Post", "Settings"];
+    const buttons = ["Feeds", "Your Profile", "Make new Post", "Settings"];
 
     return (
         <div className="w-1/5 min-w-[200px] h-screen bg-teal-50 shadow-lg p-4 flex flex-col justify-between">

@@ -6,6 +6,7 @@ import { setCredentials } from "../app/features/auth/authSlice";
 import { useNavigate } from "react-router-dom";
 import AuthPage from "../components/shared/AuthPage";
 import AuthForm from "../components/shared/AuthForm";
+import { toast } from "react-toastify";
 
 export default function Login() {
   const [form, setForm] = useState({ email: "", password: "" });
@@ -24,7 +25,7 @@ export default function Login() {
       localStorage.setItem("token", JSON.stringify(data.token))
       localStorage.setItem("name", JSON.stringify(data.user.name))
       localStorage.setItem("user_id", JSON.stringify(data.user.user_id))
-      alert("Logged in successfully");
+      toast.success("Logged in successfully!");
       navigate("/home");
     },
   });

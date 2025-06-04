@@ -25,6 +25,7 @@ app.use("/api/v1/user", require("./routes/userRoutes"));
 app.use("/api/v1/post", require('./routes/postRoutes'));
 app.use("/api/v1/comment", require('./routes/commentRoutes'));
 app.use("/api/v1/auth", require("./routes/authRoutes"));
+app.use("/api/v1/like", require("./routes/postLikeRoutes"));
 
 // Start server
 app.listen(process.env.PORT, async () => {
