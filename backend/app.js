@@ -4,6 +4,7 @@ const session = require('express-session');
 const db = require('./config/db'); // Sequelize instance
 require('dotenv').config();
 const cors = require("cors");
+const path = require("path")
 
 const app = express();
 app.use(cors({
@@ -17,6 +18,7 @@ app.use(session({
   saveUninitialized: false
 }));
 
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.json());
 

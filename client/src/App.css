@@ -1,9 +1,9 @@
 /* app.css */
-@import url("https://fonts.googleapis.com/css2?family=Comic+Relief:wght@400;700&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap');
 @import "tailwindcss";
 
 body {
-  font-family: "Comic Relief", system-ui;
+  font-family: "Open Sans", sans-serif;
   font-weight: 400;
   font-style: normal;
 }
@@ -14,7 +14,7 @@ body {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: linear-gradient(180deg, #6ee7b7, #14b8a6); 
+  background: linear-gradient(180deg, #6e90e7, #14b884); 
   border-radius: 8px;
   border: 2px solid #e0f2f1; /* adds padding look */
 }

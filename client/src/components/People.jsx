@@ -18,8 +18,8 @@ const People = ({ onSelectUser }) => {
   if (isError) return <p>Error: {error.message}</p>;
 
   return (
-    <div className="p-4">
-      <h1 className="text-xl font-semibold text-teal-700 bg-gray-50 z-10 pb-2">
+    <div className="p-4 bg-gradient-to-r from-green-100 via-green-50 to-sky-100">
+      <h1 className="text-xl font-semibold text-teal-700 z-10 pb-2">
         People You May Know
       </h1>
       {users.data.map((user) => (

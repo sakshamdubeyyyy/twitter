@@ -8,19 +8,31 @@ import MakePost from "../MakePost";
 import { toast } from "react-toastify";
 import Likes from "./Likes";
 
-const PostCard = ({ post, showOnlyReuse = false, refetchPosts }) => {
+const PostCard = ({
+  post,
+  showOnlyReuse = false,
+  refetchPosts,
+  refetchDeletedPosts,
+  refetchFeedPosts
+}) => {
   const [showComments, setShowComments] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [editMode, setEditMode] = useState(false);
   const [editPostData, setEditPostData] = useState(null);
-  const queryClient = useQueryClient();
 
   const { mutate } = useMutation(deletePost, {
-    onSuccess: () => toast.success("Post deleted"),
+    onSuccess: () => {
+      refetchPosts?.();
+      refetchFeedPosts?.();
+      toast.success("Post deleted");
+    },
   });
 
   const { mutate: restore } = useMutation(restorePost, {
-    onSuccess: () => toast.success("restored"),
+    onSuccess: () => {
+      refetchDeletedPosts?.();
+      toast.success("restored");
+    },
   });
 
   const userId = localStorage.getItem("user_id");
@@ -46,7 +58,7 @@ const PostCard = ({ post, showOnlyReuse = false, refetchPosts }) => {
 
   return (
     <>
-      <div className="bg-white border border-teal-200 rounded-2xl p-6 mb-6 shadow-md hover:shadow-lg transition-shadow duration-300">
+      <div className="bg-white border border-teal-200 rounded-2xl p-6 mb-6 hover:shadow-lg transition-shadow duration-300">
         <div className="text-xs text-teal-600 mb-2">
           {new Date(post.created_at).toLocaleString()}
         </div>
@@ -87,6 +99,18 @@ const PostCard = ({ post, showOnlyReuse = false, refetchPosts }) => {
         </div>
 
         <p className="text-gray-700 mt-2 leading-relaxed">{post.content}</p>
+        {post.photos && post.photos.length > 0 && (
+          <div className="mt-4">
+            {post.photos.map((photo, index) => (
+              <img
+                key={index}
+                src={`http://localhost:3000${photo.url}`} // adjust if hosted differently
+                alt={`Post image ${index + 1}`}
+                className="w-full max-h-[400px] object-cover rounded-lg border mt-2"
+              />
+            ))}
+          </div>
+        )}
         <div className="flex gap-4">
           <Likes post={post} userId={userId} refetchPosts={refetchPosts} />
           <button
@@ -97,7 +121,11 @@ const PostCard = ({ post, showOnlyReuse = false, refetchPosts }) => {
             <span>{showComments ? "Hide Comments" : "Comments"}</span>
           </button>
         </div>
-        <Comments postId={post.post_id} visible={showComments} postOwnerId={post.user_id} />
+        <Comments
+          postId={post.post_id}
+          visible={showComments}
+          postOwnerId={post.user_id}
+        />
       </div>
 
       <ConfirmationModal

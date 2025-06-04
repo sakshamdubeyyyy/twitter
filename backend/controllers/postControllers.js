@@ -1,9 +1,17 @@
-const { Post, Comment, User, PostLike } = require("../models");
+const { Post, Comment, User, PostLike, PostPhoto } = require("../models");
 
 // Create a new post
 exports.createPost = async (req, res) => {
   try {
+    const { user_id, name, content } = req.body;
+    const photoPath = req.file ? `/uploads/${req.file.filename}` : null;
     const post = await Post.create(req.body);
+    if (photoPath) {
+      await PostPhoto.create({
+        post_id: post.post_id,
+        url: photoPath,
+      });
+    }
     res.status(201).json(post);
   } catch (err) {
     res.status(400).json({ error: err.message });
@@ -18,11 +26,16 @@ exports.getAllPosts = async (req, res) => {
       include: [
         {
           model: PostLike,
-          as: 'likes',
-          attributes: ['user_id'], 
+          as: "likes",
+          attributes: ["user_id"],
         },
+        {
+          model: PostPhoto,
+          as: "photos", 
+          attributes: ["url"],
+        }
       ],
-      order: [['created_at', 'DESC']],
+      order: [["created_at", "DESC"]],
     });
     res.json(posts);
   } catch (err) {
@@ -38,9 +51,14 @@ exports.getPostById = async (req, res) => {
       include: [
         {
           model: PostLike,
-          as: 'likes',
-          attributes: ['user_id'],
+          as: "likes",
+          attributes: ["user_id"],
         },
+        {
+          model: PostPhoto,
+          as: "photos", 
+          attributes: ["url"],
+        }
       ],
     });
     if (!post) return res.status(404).json({ error: "Post not found" });
@@ -115,9 +133,14 @@ exports.getPostsByUserId = async (req, res) => {
       include: [
         {
           model: PostLike,
-          as: 'likes',
-          attributes: ['user_id'],
+          as: "likes",
+          attributes: ["user_id"],
         },
+        {
+          model: PostPhoto,
+          as: "photos", 
+          attributes: ["url"],
+        }
       ],
       order: [["created_at", "DESC"]],
     });
@@ -145,9 +168,14 @@ exports.getDeletedPostsByUserId = async (req, res) => {
       include: [
         {
           model: PostLike,
-          as: 'likes',
-          attributes: ['user_id'],
+          as: "likes",
+          attributes: ["user_id"],
         },
+        {
+          model: PostPhoto,
+          as: "photos", 
+          attributes: ["url"],
+        }
       ],
       order: [["created_at", "DESC"]],
     });

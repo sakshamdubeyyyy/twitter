@@ -3,6 +3,7 @@ const User = require('./User')(db);
 const Post = require('./Post')(db);
 const Comment = require('./Comment')(db);
 const PostLike = require('./PostLike')(db); 
+const PostPhoto = require('./PostPhoto')(db);
 
 User.hasMany(Post, { foreignKey: 'user_id' });
 Post.belongsTo(User, { foreignKey: 'user_id' });
@@ -19,10 +20,14 @@ PostLike.belongsTo(User, { foreignKey: 'user_id' });
 Post.hasMany(PostLike, { foreignKey: 'post_id', as: 'likes'});
 PostLike.belongsTo(Post, { foreignKey: 'post_id' });
 
+Post.hasMany(PostPhoto, { foreignKey: 'post_id', as: 'photos', onDelete: 'CASCADE' });
+PostPhoto.belongsTo(Post, { foreignKey: 'post_id' });
+
 module.exports = {
   db,
   User,
   Post,
   Comment,
   PostLike, 
+  PostPhoto
 };

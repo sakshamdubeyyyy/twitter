@@ -16,7 +16,7 @@ const Home = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [selectedButton, setSelectedButton] = useState("Feeds");
-  const [selectedUserId, setSelectedUserId] = useState(null); // null means no profile selected yet
+  const [selectedUserId, setSelectedUserId] = useState(null);
 
   const { mutate } = useMutation(logoutUser, {
     onSuccess: () => {
@@ -53,18 +53,18 @@ const Home = () => {
   };
 
   return (
-    <div className="flex h-screen">
+    <div className="flex h-screen bg-gradient-to-r from-green-200 via-sky-200 to-green-100">
       <SideBar
         selectedButton={selectedButton}
         setSelectedButton={setSelectedButton}
         onLogout={handleLogout}
       />
 
-      <div className="flex-1 p-6 bg-gray-50 overflow-y-auto h-screen">
+      <div className="flex-1 p-2 overflow-y-auto h-screen text-darkBlue w-fit">
         {renderComponent()}
       </div>
 
-      <div className="w-1/4 p-6 bg-gray-50 border border-l-gray-200 border-t-0 overflow-y-auto h-screen text-center">
+      <div className="w-1/4 border-l border-blue-200 overflow-y-auto h-screen text-center bg-white/70 backdrop-blur-md text-darkBlue">
         <People
           onSelectUser={(id) => {
             setSelectedUserId(id);

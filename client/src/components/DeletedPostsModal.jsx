@@ -5,7 +5,7 @@ import { getUsersDeletedPosts } from "../api/postApi";
 
 const DeletedPostsModal = ({ onClose }) => {
     const userId = JSON.parse(localStorage.getItem("user_id"))
-  const { data: post, isLoading, isError, error } = useQuery({
+  const { data: post, isLoading, isError, error, refetch: refetchDeletedPosts } = useQuery({
     queryKey: ["deletedPosts", userId],
     queryFn: () => getUsersDeletedPosts(userId),
   });
@@ -26,7 +26,7 @@ const DeletedPostsModal = ({ onClose }) => {
         {post?.data?.length === 0 && <p>No deleted posts found.</p>}
 
         {post?.data?.map((post) => (
-          <PostCard key={post.post_id} post={post} showOnlyReuse />
+          <PostCard key={post.post_id} post={post} showOnlyReuse refetchDeletedPosts={refetchDeletedPosts} />
         ))}
       </div>
     </div>

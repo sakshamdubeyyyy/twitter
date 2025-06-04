@@ -54,7 +54,7 @@ const Comments = ({ postId, visible, postOwnerId }) => {
             transition={{ duration: 0.3 }}
             className="mt-4 overflow-hidden"
           >
-            <div className="bg-white p-4 rounded-lg shadow-md mb-4">
+            <div className="bg-white p-4 rounded-lg mb-4">
               <MakeComment
                 postId={postId}
                 onSuccess={handleSuccess}
@@ -76,15 +76,20 @@ const Comments = ({ postId, visible, postOwnerId }) => {
                   return (
                     <div
                       key={comment.comment_id}
-                      className="bg-teal-50 p-3 rounded-lg shadow-sm flex justify-between items-start"
+                      className="border-b border-b-gray-200 p-3 flex justify-between items-start"
                     >
-                      <div>
-                        <p className="text-teal-700 font-semibold">
-                          {comment.name}
-                        </p>
-                        <p className="text-gray-800 text-sm">
-                          {comment.comment}
-                        </p>
+                      <div className="flex gap-2">
+                        <div className="flex-shrink-0 w-12 h-12 rounded-full bg-green-100 flex items-center justify-center text-teal-700 font-bold text-lg">
+                          {comment.name.charAt(0).toUpperCase()}
+                        </div>
+                        <div>
+                          <p className="text-teal-700 font-semibold">
+                            {comment.name}
+                          </p>
+                          <p className="text-gray-800 text-sm">
+                            {comment.comment}
+                          </p>
+                        </div>
                       </div>
                       {isOwnerOrAuthor && (
                         <div className="flex space-x-2 mt-1">

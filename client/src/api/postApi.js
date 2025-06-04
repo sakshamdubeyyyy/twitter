@@ -14,7 +14,6 @@ export const createPost = async (data) => {
 
 export const getUserPost = async (id) => {
     const res = await axios.get(`${API_URL}/user/${id}`);
-    console.log("Fetched user posts")
     return res;
 }
 

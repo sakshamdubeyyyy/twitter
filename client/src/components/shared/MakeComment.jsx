@@ -74,7 +74,7 @@ const MakeComment = ({ postId, onSuccess, editData, cancelEdit }) => {
       <button
         onClick={handleSubmit}
         disabled={isCreating || isUpdating}
-        className="bg-teal-600 text-white px-4 py-2 rounded-lg hover:bg-teal-700 transition disabled:opacity-50"
+        className="bg-blue-800 text-white px-4 py-2 rounded-lg hover:bg-blue-900 transition disabled:opacity-50"
       >
         {isCreating || isUpdating
           ? "Saving..."
