@@ -20,7 +20,7 @@ const Feeds = () => {
     queryKey: ["posts"],
     queryFn: getAllPosts,
   });
-  console.log(posts?.data)
+  
   const sortedPosts = useMemo(() => {
     if (!posts?.data) return [];
 
@@ -49,7 +49,7 @@ const Feeds = () => {
   return (
     <div className="min-h-screen py-10 px-4">
       <div className="max-w-2xl mx-auto space-y-8">
-        <MakePost compact refetchFeedPosts={refetchFeedPosts} />
+        <MakePost compact refetchFeedPosts={refetchFeedPosts} post={posts} />
 
         <div className="z-10 py-2 flex items-center justify-between">
           <h2 className="text-2xl font-bold text-black border-b border-teal-200 pb-2">

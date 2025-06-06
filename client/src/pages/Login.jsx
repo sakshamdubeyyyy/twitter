@@ -28,6 +28,9 @@ export default function Login() {
       toast.success("Logged in successfully!");
       navigate("/home");
     },
+    onError:(error) => {
+      toast.error(error.response.data.error)
+    }
   });
 
   const handleSubmit = (e) => {

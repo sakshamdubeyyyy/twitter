@@ -57,7 +57,7 @@ const UserProfile = ({ userId }) => {
       </div>
 
       <div>
-        <h2 className="text-2xl font-bold text-teal-700 mb-4">Posts by {user.name}</h2>
+        <h2 className="text-2xl font-bold text-teal-700 mb-4">Posts by {user.name} - {postsData.data.length} Posts</h2>
         {isPostsLoading && <p className="text-teal-600">Loading posts...</p>}
         {isPostsError && <p className="text-red-500">Error: {postsError.message}</p>}
         {!isPostsLoading && postsData?.length === 0 && (

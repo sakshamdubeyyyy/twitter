@@ -19,6 +19,9 @@ export default function Register() {
       toast.success("Registered successfully");
       navigate("/");
     },
+    onError:(error)=>{
+      toast.error(error.response.data.error)
+    }
   });
 
   const handleSubmit = (e) => {

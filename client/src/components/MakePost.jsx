@@ -1,4 +1,4 @@
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import React, { useEffect, useState } from "react";
 import { createPost, updatePost } from "../api/postApi";
 import { toast } from "react-toastify";
@@ -14,6 +14,7 @@ const MakePost = ({
 }) => {
   const [content, setContent] = useState("");
   const [selectedFile, setSelectedFile] = useState(null);
+  const queryClient = useQueryClient();
 
   useEffect(() => {
     if (isEdit && editData) {
@@ -29,14 +30,22 @@ const MakePost = ({
       setSelectedFile(null);
       onClose?.();
     },
+    onError:(error)=> {
+      toast.error(error.response.data.error)
+    }
   });
 
   const updateMutation = useMutation((data) => updatePost(post.post_id, data), {
     onSuccess: () => {
+      refetchFeedPosts?.();
+      queryClient.invalidateQueries(["posts"]);
       toast.success("Post updated successfully!");
       setContent("");
       onClose?.();
     },
+    onError: (error) => {
+      toast.error(error.response.data.error);
+    }
   });
 
   const handleSubmit = () => {

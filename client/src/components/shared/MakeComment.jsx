@@ -20,6 +20,9 @@ const MakeComment = ({ postId, onSuccess, editData, cancelEdit }) => {
         toast.success("Comment added successfully!");
         onSuccess && onSuccess();
       },
+      onError: (error) => {
+        toast.error(error.response.data.error);
+      }
     }
   );
 

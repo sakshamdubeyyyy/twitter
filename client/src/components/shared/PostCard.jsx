@@ -19,6 +19,7 @@ const PostCard = ({
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [editMode, setEditMode] = useState(false);
   const [editPostData, setEditPostData] = useState(null);
+  const queryClient = useQueryClient();
 
   const { mutate } = useMutation(deletePost, {
     onSuccess: () => {
@@ -31,6 +32,7 @@ const PostCard = ({
   const { mutate: restore } = useMutation(restorePost, {
     onSuccess: () => {
       refetchDeletedPosts?.();
+      queryClient.invalidateQueries(["deletedPosts", userId])
       toast.success("restored");
     },
   });

@@ -9,7 +9,7 @@ const router = require('express').Router();
 router.get("/", getAllPosts);
 router.get("/:id", getPostById);
 router.post("/",upload.single("photo"), postValidator, validate, createPost);
-router.put("/:id", updatePost);
+router.put("/:id", postValidator, validate, updatePost);
 router.delete("/:id", deletePost);
 router.get("/:id/comments", getPostComments)
 router.get("/user/:id", getPostsByUserId)
