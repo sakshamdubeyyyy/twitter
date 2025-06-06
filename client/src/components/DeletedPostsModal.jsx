@@ -4,8 +4,15 @@ import PostCard from "./shared/PostCard";
 import { getUsersDeletedPosts } from "../api/postApi";
 
 const DeletedPostsModal = ({ onClose }) => {
-    const userId = JSON.parse(localStorage.getItem("user_id"))
-  const { data: post, isLoading, isError, error, refetch: refetchDeletedPosts } = useQuery({
+  const userId = JSON.parse(localStorage.getItem("user_id"));
+
+  const {
+    data: post,
+    isLoading,
+    isError,
+    error,
+    refetch: refetchDeletedPosts,
+  } = useQuery({
     queryKey: ["deletedPosts", userId],
     queryFn: () => getUsersDeletedPosts(userId),
   });
@@ -23,10 +30,18 @@ const DeletedPostsModal = ({ onClose }) => {
 
         {isLoading && <p>Loading...</p>}
         {isError && <p className="text-red-500">Error: {error.message}</p>}
-        {post?.data?.length === 0 && <p>No deleted posts found.</p>}
+
+        {!isLoading && !isError && (!post?.data || post.data.length === 0) && (
+          <p className="text-gray-500">No deleted posts found.</p>
+        )}
 
         {post?.data?.map((post) => (
-          <PostCard key={post.post_id} post={post} showOnlyReuse refetchDeletedPosts={refetchDeletedPosts} />
+          <PostCard
+            key={post.post_id}
+            post={post}
+            showOnlyReuse
+            refetchDeletedPosts={refetchDeletedPosts}
+          />
         ))}
       </div>
     </div>

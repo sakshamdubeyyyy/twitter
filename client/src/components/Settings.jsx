@@ -8,7 +8,6 @@ const Settings = () => {
   const userId = JSON.parse(localStorage.getItem("user_id"));
   const queryClient = useQueryClient();
   const [showDeletedModal, setShowDeletedModal] = useState(false);
-
   const [modalData, setModalData] = useState(null);
 
   const {
@@ -25,6 +24,7 @@ const Settings = () => {
   const mutation = useMutation({
     mutationFn: (updatedFields) => updateUser(userId, updatedFields),
     onSuccess: () => {
+      queryClient.invalidateQueries(["users"]);
       queryClient.invalidateQueries(["user", userId]);
       setModalData(null);
     },

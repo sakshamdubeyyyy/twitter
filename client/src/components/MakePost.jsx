@@ -15,6 +15,7 @@ const MakePost = ({
   const [content, setContent] = useState("");
   const [selectedFile, setSelectedFile] = useState(null);
   const queryClient = useQueryClient();
+  const userId = JSON.parse(localStorage.getItem("user_id"))
 
   useEffect(() => {
     if (isEdit && editData) {
@@ -39,6 +40,7 @@ const MakePost = ({
     onSuccess: () => {
       refetchFeedPosts?.();
       queryClient.invalidateQueries(["posts"]);
+      queryClient.invalidateQueries(["userPosts", userId]);
       toast.success("Post updated successfully!");
       setContent("");
       onClose?.();

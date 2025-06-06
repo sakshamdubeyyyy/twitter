@@ -21,17 +21,12 @@ const UserProfile = ({ userId }) => {
     isLoading: isPostsLoading,
     isError: isPostsError,
     error: postsError,
+    refetch: refetchPosts
   } = useQuery({
     queryKey: ["userPosts", userId],
     queryFn: () => getUserPost(userId),
     enabled: !!userId,
   });
-
-  const {refetch: refetchPosts} = useQuery({
-    queryKey: ["userPosts", userId],
-    queryFn: () => getUserPost(userId),
-    enabled: !!userId,
-  })
 
   if (isUserLoading)
     return <p className="text-teal-600 font-medium">Loading profile...</p>;
@@ -53,11 +48,12 @@ const UserProfile = ({ userId }) => {
           <Field label="Name" value={user.name} />
           <Field label="Email" value={user.email} />
           <Field label="Joined us since" value={formatDate(user.created_at)} />
+          <Field label="Posts" value={postsData?.data.length} />
         </div>
       </div>
 
       <div>
-        <h2 className="text-2xl font-bold text-teal-700 mb-4">Posts by {user.name} - {postsData.data.length} Posts</h2>
+        <h2 className="text-2xl font-bold text-teal-700 mb-4">Posts by {user.name}</h2>
         {isPostsLoading && <p className="text-teal-600">Loading posts...</p>}
         {isPostsError && <p className="text-red-500">Error: {postsError.message}</p>}
         {!isPostsLoading && postsData?.length === 0 && (
