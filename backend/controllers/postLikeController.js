@@ -1,4 +1,4 @@
-const { PostLike } = require('../models');
+const { PostLike, Post, Notification } = require("../models");
 
 // Add Like to Post
 exports.addLike = async (req, res) => {
@@ -10,12 +10,26 @@ exports.addLike = async (req, res) => {
     });
 
     if (!created) {
-      return res.status(400).json({ message: 'Post already liked' });
+      return res.status(400).json({ message: "Post already liked" });
     }
 
-    res.status(201).json({ message: 'Post liked successfully', like });
+    // Get post to determine the receiver (post owner)
+    const post = await Post.findByPk(post_id);
+
+    if (post && user_id !== post.user_id) {
+      await Notification.create({
+        sender_id: user_id,
+        receiver_id: post.user_id,
+        post_id,
+        type: "like",
+      });
+    }
+
+    res.status(201).json({ message: "Post liked successfully", like });
   } catch (err) {
-    res.status(500).json({ message: 'Failed to like post', error: err.message });
+    res
+      .status(500)
+      .json({ message: "Failed to like post", error: err.message });
   }
 };
 
@@ -29,11 +43,13 @@ exports.removeLike = async (req, res) => {
     });
 
     if (!deleted) {
-      return res.status(404).json({ message: 'Like not found' });
+      return res.status(404).json({ message: "Like not found" });
     }
 
-    res.status(200).json({ message: 'Like removed successfully' });
+    res.status(200).json({ message: "Like removed successfully" });
   } catch (err) {
-    res.status(500).json({ message: 'Failed to remove like', error: err.message });
+    res
+      .status(500)
+      .json({ message: "Failed to remove like", error: err.message });
   }
 };

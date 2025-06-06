@@ -22,7 +22,7 @@ const DeletedPostsModal = ({ onClose }) => {
       <div className="bg-white rounded-lg p-6 w-full max-w-3xl relative max-h-[80vh] overflow-y-auto">
         <button
           onClick={onClose}
-          className="absolute top-3 right-4 text-xl font-bold text-gray-500 hover:text-gray-700"
+          className="absolute top-3 right-4 text-3xl font-bold text-gray-500 cursor-pointer hover:text-gray-700"
         >
           ×
         </button>

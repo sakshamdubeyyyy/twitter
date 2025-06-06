@@ -1,5 +1,4 @@
 import axios from 'axios';
-
 const API_URL = 'http://localhost:3000/api/v1/post';
 
 export const getAllPosts = async () => {
@@ -11,6 +10,11 @@ export const createPost = async (data) => {
     const res = axios.post(`${API_URL}`, data);
     return res;
 } 
+
+export const getPostById = async (id) => {
+    const res = await axios.get(`${API_URL}/${id}`);
+    return res;
+}
 
 export const getUserPost = async (id) => {
     const res = await axios.get(`${API_URL}/user/${id}`);

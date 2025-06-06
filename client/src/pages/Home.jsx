@@ -11,6 +11,7 @@ import MakePost from "../components/MakePost";
 import Settings from "../components/Settings";
 import People from "../components/People";
 import { toast } from "react-toastify";
+import Notifications from "../components/Notifications";
 
 const Home = () => {
   const dispatch = useDispatch();
@@ -47,6 +48,8 @@ const Home = () => {
         return <Settings />;
       case "UserProfile":
         return <UserProfile userId={selectedUserId} />;
+      case "Notifications":
+        return <Notifications />
       default:
         return <Feeds />;
     }
