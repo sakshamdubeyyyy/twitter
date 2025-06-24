@@ -31,9 +31,9 @@ app.use("/api/v1/like", require("./routes/postLikeRoutes"));
 app.use("/api/v1/notifications", require("./routes/notificationRoutes"));
 
 // Start server
-app.listen(process.env.PORT, async () => {
+app.listen(process.env.PORT, '0.0.0.0', async () => {
   try {
-    await db.authenticate(); // ✅ Correct Sequelize connection check
+    await db.authenticate(); 
     console.log("Database connected.");
 
     await db.sync({ alter: true }); 
