@@ -9,10 +9,10 @@ export default function AuthPage({ children }) {
   const background = useTransform(
     [x, y],
     ([latestX, latestY]) =>
-      `radial-gradient(circle at ${latestX}px ${latestY}px, #A7F3D0, #F0FDF4)`
+      `radial-gradient(circle at ${latestX}px ${latestY}px, #38BDF8, #E0F2FE)`
   );
 
-  const staticBackground = `radial-gradient(circle at center, #A7F3D0, #F0FDF4)`;
+  const staticBackground = `radial-gradient(circle at center, #38BDF8, #E0F2FE)`;
 
   return (
     <motion.div
@@ -31,4 +31,4 @@ export default function AuthPage({ children }) {
       {children}
     </motion.div>
   );
-} 
+}

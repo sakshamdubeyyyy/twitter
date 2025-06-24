@@ -5,8 +5,6 @@ import {
   markNotificationSeen,
 } from "../api/notificationApi";
 import NotificationCard from "./shared/NotificationCard";
-import SeenNotificationsModal from "./DeletedNotificationsModal"; // ✅ Make sure this exists
-import { Trash } from "lucide-react";
 
 const Notifications = () => {
   const [showSeenModal, setShowSeenModal] = useState(false);

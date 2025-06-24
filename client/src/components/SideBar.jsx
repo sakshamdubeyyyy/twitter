@@ -11,6 +11,7 @@ const SideBar = ({ selectedButton, setSelectedButton, onLogout }) => {
     "Notifications",
     "Settings",
   ];
+  
   const userId = JSON.parse(localStorage.getItem("user_id"));
 
   const { data: notifications = [] } = useQuery({

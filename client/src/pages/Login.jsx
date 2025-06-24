@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { loginUser } from "../api/authApi";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { setCredentials } from "../app/features/auth/authSlice";
 import { useNavigate } from "react-router-dom";
 import AuthPage from "../components/shared/AuthPage";

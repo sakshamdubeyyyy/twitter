@@ -4,7 +4,6 @@ import { getAllPosts } from "../api/postApi";
 import PostCard from "./shared/PostCard";
 import MakePost from "./MakePost";
 
-// Import lucide-react icons
 import { ArrowUp, ArrowDown } from "lucide-react";
 
 const Feeds = () => {

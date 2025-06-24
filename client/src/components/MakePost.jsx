@@ -2,7 +2,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import React, { useEffect, useState } from "react";
 import { createPost, updatePost } from "../api/postApi";
 import { toast } from "react-toastify";
-import { Paperclip } from "lucide-react"; // or any other icon library
+import { Paperclip } from "lucide-react"; 
 
 const MakePost = ({
   compact = false,
@@ -90,6 +90,7 @@ const MakePost = ({
         onChange={(e) => setContent(e.target.value)}
       />
       <div className="flex items-center justify-between mt-2">
+        {!isEdit && 
         <label className="cursor-pointer flex items-center space-x-1 text-blue-700 hover:underline">
           <Paperclip size={18} />
           <span>Attach Photo</span>
@@ -99,7 +100,7 @@ const MakePost = ({
             className="hidden"
             onChange={(e) => setSelectedFile(e.target.files[0])}
           />
-        </label>
+        </label>}
         {selectedFile && (
           <span className="text-sm text-gray-700">{selectedFile.name}</span>
         )}

@@ -1,6 +1,6 @@
 import axios from "axios"
 
-const API_URL = "http://localhost:3000/api/v1/comment"
+const API_URL = "http://13.127.33.33:3000/api/v1/comment"
 
 export const getPostComments = async (id) => {
     const res = await axios.get(`${API_URL}/post/${id}`);

@@ -5,7 +5,6 @@ exports.createComment = async (req, res) => {
   try {
     const comment = await Comment.create(req.body);
 
-    // Get post to determine the receiver (post owner)
     const post = await Post.findByPk(comment.post_id);
 
     if (post && comment.user_id !== post.user_id) {

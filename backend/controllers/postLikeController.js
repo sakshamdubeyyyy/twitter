@@ -13,7 +13,6 @@ exports.addLike = async (req, res) => {
       return res.status(400).json({ message: "Post already liked" });
     }
 
-    // Get post to determine the receiver (post owner)
     const post = await Post.findByPk(post_id);
 
     if (post && user_id !== post.user_id) {

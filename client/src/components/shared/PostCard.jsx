@@ -106,7 +106,7 @@ const PostCard = ({
             {post.photos.map((photo, index) => (
               <img
                 key={index}
-                src={`http://localhost:3000${photo.url}`} // adjust if hosted differently
+                src={`http://localhost:3000${photo.url}`} 
                 alt={`Post image ${index + 1}`}
                 className="w-full max-h-[400px] object-cover rounded-lg border mt-2"
               />
@@ -142,7 +142,7 @@ const PostCard = ({
         <div className="fixed inset-0 bg-opacity-30 backdrop-blur-xs flex items-center justify-center z-50">
           <div className="w-full max-w-xl bg-white rounded-xl p-6 shadow-lg relative">
             <button
-              className="absolute top-2 right-3 text-gray-600 hover:text-gray-800 text-xl"
+              className="absolute top-2 right-3 text-gray-600 cursor-pointer hover:text-gray-800 text-2xl"
               onClick={() => setEditMode(false)}
             >
               ×

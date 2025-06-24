@@ -29,7 +29,6 @@ User.hasMany(Notification, { foreignKey: 'receiver_id', as: 'receivedNotificatio
 Notification.belongsTo(User, { foreignKey: 'sender_id', as: 'sender' });
 Notification.belongsTo(User, { foreignKey: 'receiver_id', as: 'receiver' });
 
-// Notification is linked to a post
 Post.hasMany(Notification, { foreignKey: 'post_id' });
 Notification.belongsTo(Post, { foreignKey: 'post_id' });
 

@@ -1,13 +1,15 @@
 import React, { useState } from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
-import { getUserById } from "../../api/userApi";
-import { getPostById } from "../../api/postApi";
 import { deleteNotification } from "../../api/notificationApi";
 import { MessageSquare, Heart, Trash2 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import PostCard from "./PostCard";
+import { getPostById } from "../../api/postApi";
+import { getUserById } from "../../api/userApi";
 
 const NotificationCard = ({ notification }) => {
   const [isDeleted, setIsDeleted] = useState(false);
+  const [showPostModal, setShowPostModal] = useState(false);
 
   const { data: senderResponse, isLoading: loadingSender } = useQuery({
     queryKey: ["user", notification.sender_id],
@@ -32,7 +34,7 @@ const NotificationCard = ({ notification }) => {
   const sender = senderResponse?.data;
   const post = postResponse?.data;
 
-  if (loadingSender || loadingPost)
+  if (loadingSender)
     return <div className="text-sm text-gray-500">Loading...</div>;
 
   return (
@@ -43,7 +45,8 @@ const NotificationCard = ({ notification }) => {
           initial={{ opacity: 1, x: 0 }}
           exit={{ opacity: 0, x: -200, backgroundColor: "#fee2e2" }} // red-100 background fade on delete
           transition={{ duration: 0.6, ease: "easeInOut" }}
-          className="flex gap-4 bg-white border border-gray-200 rounded-xl p-5 shadow-sm hover:shadow-xl transition-all duration-300 mb-2 relative"
+          className="flex gap-4 bg-white border border-gray-200 rounded-xl p-5 shadow-sm hover:shadow-xl transition-all duration-300 mb-2 relative cursor-pointer"
+          onClick={() => setShowPostModal(true)}
         >
           <div className="flex-1">
             <div className="flex items-center gap-2 mb-1">
@@ -70,13 +73,42 @@ const NotificationCard = ({ notification }) => {
           </div>
 
           <button
-            onClick={handleDelete}
+            onClick={(e) => {
+              e.stopPropagation();
+              handleDelete();
+            }}
             className="absolute top-4 right-4 text-red-500 hover:text-red-700 transition-colors cursor-pointer"
             title="Delete Notification"
           >
             <Trash2 size={16} />
           </button>
         </motion.div>
+      )}
+
+      {/* Modal with PostCard */}
+      {showPostModal && (
+        <div className="fixed inset-0 backdrop-blur-xs bg-opacity-40 flex items-center justify-center z-50">
+          <div className="bg-white rounded-xl max-w-2xl w-full p-8 relative max-h-[90vh] overflow-y-auto">
+            <button
+              className="absolute top-3 right-4 text-gray-600 hover:text-black text-3xl cursor-pointer"
+              onClick={() => setShowPostModal(false)}
+            >
+              ×
+            </button>
+            {loadingPost ? (
+              <div className="text-sm text-gray-500">Loading post...</div>
+            ) : post ? (
+              <PostCard
+                post={post}
+                refetchPosts={null}
+                refetchFeedPosts={null}
+                refetchDeletedPosts={null}
+              />
+            ) : (
+              <div className="text-sm text-red-500">Post not found</div>
+            )}
+          </div>
+        </div>
       )}
     </AnimatePresence>
   );

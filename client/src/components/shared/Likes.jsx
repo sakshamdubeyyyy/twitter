@@ -1,4 +1,3 @@
-import React, { useMemo } from "react";
 import { Heart } from "lucide-react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { addLike, removeLike } from "../../api/likeApi";

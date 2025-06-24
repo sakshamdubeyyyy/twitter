@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'http://localhost:3000/api/v1/user';
+const API_URL = 'http://13.127.33.33:3000/api/v1/user';
 
 export const getAllUsers = async () => {
   const res = await axios.get(`${API_URL}`);
