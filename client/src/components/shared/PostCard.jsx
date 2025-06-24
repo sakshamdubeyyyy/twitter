@@ -106,7 +106,7 @@ const PostCard = ({
             {post.photos.map((photo, index) => (
               <img
                 key={index}
-                src={`http://localhost:3000${photo.url}`} 
+                src={`http://13.127.33.33:3000${photo.url}`} 
                 alt={`Post image ${index + 1}`}
                 className="w-full max-h-[400px] object-cover rounded-lg border mt-2"
               />
