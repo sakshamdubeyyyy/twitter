@@ -8,7 +8,7 @@ const path = require("path")
 
 const app = express();
 app.use(cors({
-    origin: 'http://13.127.33.33:5173',
+    origin: 'http://13.127.33.33',
     credentials: true
 }))
 // Middleware
@@ -30,7 +30,6 @@ app.use("/api/v1/auth", require("./routes/authRoutes"));
 app.use("/api/v1/like", require("./routes/postLikeRoutes"));
 app.use("/api/v1/notifications", require("./routes/notificationRoutes"));
 
-// Start server
 app.listen(process.env.PORT, '0.0.0.0', async () => {
   try {
     await db.authenticate(); 
