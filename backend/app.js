@@ -8,7 +8,7 @@ const path = require("path")
 
 const app = express();
 app.use(cors({
-    origin: 'http://13.127.33.33',
+    origin: 'http://voza.work.gd',
     credentials: true
 }))
 // Middleware
