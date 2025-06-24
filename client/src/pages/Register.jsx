@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { registerUser } from "../api/authApi";
 import { useDispatch } from "react-redux";
@@ -12,6 +12,12 @@ export default function Register() {
   const [form, setForm] = useState({ name: "", email: "", password: "" });
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+    useEffect(() => {
+      if(localStorage.getItem("token")){
+        navigate("/home")
+      }
+    }, [])
 
   const { mutate, isLoading, error } = useMutation(registerUser, {
     onSuccess: (data) => {
